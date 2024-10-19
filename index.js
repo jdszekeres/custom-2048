@@ -40,7 +40,16 @@ function keyPressHandler(e) {
         case "ArrowDown":
         case "ArrowLeft":
         case "ArrowRight":
+
+
+
             newGrid = move(window.grid, e.key);
+
+            const b = [move(structuredClone(newGrid), 'ArrowRight'), move(structuredClone(newGrid), 'ArrowDown')];
+            const eq = a => b => a === b;
+            if (arrayDeepCompare(eq)(b[0])(b[1]) && arrayDeepCompare(eq)(b[1])(structuredClone(newGrid))) {
+                alert("You lost") // no possible moves
+            }
             break;
 
         default:
@@ -54,7 +63,7 @@ function keyPressHandler(e) {
         try {
             add_random_tile(newGrid);
         } catch (e) {
-            alert("You lost")
+
         }
     }
     update_grid(newGrid);
@@ -84,12 +93,13 @@ const update_grid = (grid) => {
             const val = grid[i][j]
             if (val !== 0) {
                 const img = config.images[val]
-                document.getElementById(`${i}-${j}`).innerHTML = img ? `<img class="tile" src="images/${img}" ${config.options.showNumberOnHover ? "title='" + val + "'" : ""}/>` : `<div class='tile'>${val}</div>`
+                document.getElementById(`${i}-${j}`).innerHTML = img ? `<img class="tile tile-${val}" src="images/${img}" ${config.options.showNumberOnHover ? "title='" + val + "'" : ""}/>` : `<div class='tile tile-${val}'>${val}</div>`
             } else {
                 document.getElementById(`${i}-${j}`).innerHTML = "";
             }
         }
     }
+    textFit(document.querySelectorAll('div.tile'));
 }
 
 update_grid(grid);
