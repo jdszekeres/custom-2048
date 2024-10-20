@@ -43,9 +43,12 @@ body {
     position: relative;
     display: flex;
     flex-wrap: wrap;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     row-gap: 5px;
     column-gap: 5px;
-    padding: 5px;
+    
 }
 
 .grid > div:not(#game-over) {
