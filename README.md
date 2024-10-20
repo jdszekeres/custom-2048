@@ -4,7 +4,7 @@
 
 ### Options
 
-#### All options are available in the `config.js` and `config.css` file
+#### All options are available in the `scripts/config.js` and `style/config.css` file
 
 ##### JS
 

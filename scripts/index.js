@@ -31,7 +31,12 @@ const add_random_tile = (grid) => {
 }
 
 document.addEventListener('keydown', keyPressHandler);
-
+function game_over() {
+    document.removeEventListener('keydown', keyPressHandler);
+    document.getElementById('game-over').style.zIndex = 100;
+    document.getElementById('game-over').style.animation = 'fade-in 800ms ease 1200ms'
+    setTimeout(() => document.getElementById('game-over').style.opacity = 1, 1200)
+}
 function keyPressHandler(e) {
     const prevTiles = structuredClone(grid)
 
@@ -51,10 +56,7 @@ function keyPressHandler(e) {
             const avail = structuredClone(newGrid).flatMap((row, i) => row.map((val, j) => val === 0 ? [i, j] : null).filter(Boolean));
             if (arrayDeepCompare(eq)(b[0])(b[1]) && arrayDeepCompare(eq)(b[1])(structuredClone(newGrid)) && avail.length === 0) {
                 // no possible moves
-                document.removeEventListener('keydown', keyPressHandler);
-                document.getElementById('game-over').style.zIndex = 100;
-                document.getElementById('game-over').style.animation = 'fade-in 800ms ease 1200ms'
-                setTimeout(() => document.getElementById('game-over').style.opacity = 1, 1200)
+                game_over();
             }
             break;
 
@@ -73,6 +75,12 @@ function keyPressHandler(e) {
     }
     setTimeout(() => update_grid(newGrid), 1) // go twice so we merge then update
 
+    const b = [move(structuredClone(newGrid), 'ArrowRight').grid, move(structuredClone(newGrid), 'ArrowDown').grid];
+    const avail = structuredClone(newGrid).flatMap((row, i) => row.map((val, j) => val === 0 ? [i, j] : null).filter(Boolean));
+    if (arrayDeepCompare(eq)(b[0])(b[1]) && arrayDeepCompare(eq)(b[1])(structuredClone(newGrid)) && avail.length === 0) {
+        // no possible moves
+        game_over();
+    }
     setTimeout(() => {
         if (config.options.animate) {
             const newTilePos = getNewTilePosition(prevTiles, newGrid); // Detect where the new tile was added
