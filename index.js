@@ -32,7 +32,6 @@ const add_random_tile = (grid) => {
 
 document.addEventListener('keydown', keyPressHandler);
 
-let no_new_spaces = false;
 function keyPressHandler(e) {
     const prevTiles = structuredClone(grid)
 
@@ -50,8 +49,12 @@ function keyPressHandler(e) {
             score += result.score;
             const b = [move(structuredClone(newGrid), 'ArrowRight').grid, move(structuredClone(newGrid), 'ArrowDown').grid];
             const avail = structuredClone(newGrid).flatMap((row, i) => row.map((val, j) => val === 0 ? [i, j] : null).filter(Boolean));
-            if (arrayDeepCompare(eq)(b[0])(b[1]) && arrayDeepCompare(eq)(b[1])(structuredClone(newGrid)) && avail === 0) {
-                alert("You lost") // no possible moves
+            if (arrayDeepCompare(eq)(b[0])(b[1]) && arrayDeepCompare(eq)(b[1])(structuredClone(newGrid)) && avail.length === 0) {
+                // no possible moves
+                document.removeEventListener('keydown', keyPressHandler);
+                document.getElementById('game-over').style.zIndex = 100;
+                document.getElementById('game-over').style.animation = 'fade-in 800ms ease 1200ms'
+                setTimeout(() => document.getElementById('game-over').style.opacity = 1, 1200)
             }
             break;
 
@@ -65,9 +68,7 @@ function keyPressHandler(e) {
     if (!nothingHappened) {
         try {
             add_random_tile(newGrid);
-            no_new_spaces = false;
         } catch (e) {
-            no_new_spaces = true;
         }
     }
     setTimeout(() => update_grid(newGrid), 1) // go twice so we merge then update
@@ -103,13 +104,13 @@ const update_grid = (grid) => {
             }
         }
     }
-    textFit(document.querySelectorAll('div.tile'));
+    textFit(document.querySelectorAll('div.tile'), { alignHoriz: true, alignVert: true });
     document.getElementById('current-score').textContent = score.toLocaleString();
 
     if (high_score < score) {
-        score = high_score
-        if (parseInt(localStorage.getItem(config.options.HighScoreKey)) > high_score) {
-            high_score = score
+        high_score = score;
+        if (parseInt(localStorage.getItem(config.options.HighScoreKey)) < high_score) {
+            localStorage.setItem(config.options.HighScoreKey, high_score);
         }
     }
     document.getElementById('high-score').textContent = high_score.toLocaleString();

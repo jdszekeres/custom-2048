@@ -19,7 +19,7 @@ body {
     flex-basis: auto;
     flex-direction: column;
     height: 52px;
-    min-width: 72px;
+    min-width: 84px;
 
     font-family: Rubik, Arial, system-ui, sans-serif;
     color: rgb(152, 136, 118);
@@ -40,7 +40,7 @@ body {
     width: calc(var(--grid-size) + 20px);
     height: calc(var(--grid-size) + 20px);
     background-color: #BAACA0;
-
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     row-gap: 5px;
@@ -48,18 +48,61 @@ body {
     padding: 5px;
 }
 
-.grid > div {
+.grid > div:not(#game-over) {
     width: calc(var(--grid-size) / 4 );
     height: calc(var(--grid-size) / 4);
     background-color: #afa192;
-
+    
     border-radius: 5px;
 }
 
 
-.grid > div > * {
+.grid > div:not(#game-over) > * {
     width: 100%;
     height: 100%;
+}
+#game-over {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    backdrop-filter: sepia(10%) blur(3px);
+    background-color: rgba(238, 228, 218, 0.5);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    z-index: -10000;
+    
+
+}
+#game-over > h1 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: rgb(119, 110, 101);
+    cursor: default;
+    font-family: Arial,
+        clear sans,
+        helvetica neue,
+        sans-serif;
+}
+#game-over > button {
+    margin: auto;
+    padding: 0px 20px;
+    height: 40px;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: 700;
+    color: rgb(249, 246, 242);
+    background-color: rgb(143, 122, 102);
+    border: 0px;
+    font-family: Arial,
+        clear sans,
+        helvetica neue,
+        sans-serif;
 }
 .grid > div > div.tile {
     text-align: center;
@@ -106,5 +149,15 @@ body {
 
     100% {
         transform: scale(1);
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    
+    100% {
+        opacity: 1;
     }
 }
