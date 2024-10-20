@@ -1,56 +1,62 @@
-function slideRowLeft(row) {
-    // Remove all zeros
+function slideRowLeft(row, score) {
     let nonZero = row.filter(num => num !== 0);
 
-    // Merge adjacent tiles if they are the same
     for (let i = 0; i < nonZero.length - 1; i++) {
         if (nonZero[i] === nonZero[i + 1]) {
-            nonZero[i] *= 2; // Double the value
-            nonZero[i + 1] = 0; // Mark the next tile as "merged"
+            nonZero[i] *= 2; // Merge the tiles and double the value
+            nonZero[i + 1] = 0; // Mark the next tile as merged
+            score += nonZero[i]; // Add the merged value to the score
         }
     }
 
-    // Remove the newly formed zeros after merging
     nonZero = nonZero.filter(num => num !== 0);
 
-    // Fill the rest of the row with zeros
     while (nonZero.length < 4) {
         nonZero.push(0);
     }
 
-    return nonZero;
+    return { row: nonZero, score };
 }
 
-
+// Function to move all rows to the left
 function moveLeft(grid) {
+    let score = 0;
     for (let i = 0; i < 4; i++) {
-        grid[i] = slideRowLeft(grid[i]);
+        let result = slideRowLeft(grid[i], score);
+        grid[i] = result.row;
+        score = result.score;
     }
-    return grid;
+    return { grid, score };
 }
 
+// Function to move all rows to the right
 function moveRight(grid) {
+    let score = 0;
     for (let i = 0; i < 4; i++) {
-        grid[i] = slideRowLeft(grid[i].reverse()).reverse();
+        let result = slideRowLeft(grid[i].reverse(), score);
+        grid[i] = result.row.reverse(); // Reverse back after sliding
+        score = result.score;
     }
-    return grid;
+    return { grid, score };
 }
 
-
+// Function to transpose the grid (switch rows and columns)
 function transpose(grid) {
     return grid[0].map((_, i) => grid.map(row => row[i]));
 }
 
+// Function to move up
 function moveUp(grid) {
     grid = transpose(grid);
-    moveLeft(grid);
-    return transpose(grid);
+    let result = moveLeft(grid);
+    return { grid: transpose(result.grid), score: result.score };
 }
 
+// Function to move down
 function moveDown(grid) {
     grid = transpose(grid);
-    moveRight(grid);
-    return transpose(grid);
+    let result = moveRight(grid);
+    return { grid: transpose(result.grid), score: result.score };
 }
 
 
@@ -66,6 +72,6 @@ function move(grid, key) {
         case 'ArrowRight':
             return moveRight(grid);
 
-        default: return grid;
+        default: return { grid, score: 0 };
     }
 }

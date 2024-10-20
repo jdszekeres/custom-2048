@@ -1,21 +1,33 @@
-:root {
-    --grid-size: 50vw;
+@media screen and (orientation: portrait) {
+    :root {
+        --grid-size: 50vw;
+    }
+}
+@media screen and (orientation: landscape) {
+    :root {
+            --grid-size: 50vh;
+        }
 }
 
-.tile-2    {background-color: #eee4da !important}
-.tile-4    {background-color: #ede0c8 !important}
-.tile-8    {background-color: #f2b179 !important}
-.tile-16   {background-color: #f59563 !important}
-.tile-32   {background-color: #f67c5f !important}
-.tile-64   {background-color: #f65e3b !important}
-.tile-128  {background-color: #edcf72 !important}
-.tile-256  {background-color: #edcc61 !important}
-.tile-512  {background-color: #edc850 !important}
-.tile-1024 {background-color: #edc53f !important}
-.tile-2048 {background-color: #edc22e !important}
+body {
+    background-color: rgb(250 248 240);
+}
+
+.tile-2    {background-color: #eee4da !important; color: #776e65 !important}
+.tile-4    {background-color: #ede0c8 !important; color: #776e65 !important}
+.tile-8    {background-color: #f2b179 !important; color: #f9f6f2 !important}
+.tile-16   {background-color: #f59563 !important; color: #f9f6f2 !important}
+.tile-32   {background-color: #f67c5f !important; color: #f9f6f2 !important}
+.tile-64   {background-color: #f65e3b !important; color: #f9f6f2 !important}
+.tile-128  {background-color: #edcf72 !important; color: #f9f6f2 !important}
+.tile-256  {background-color: #edcc61 !important; color: #f9f6f2 !important}
+.tile-512  {background-color: #edc850 !important; color: #f9f6f2 !important}
+.tile-1024 {background-color: #edc53f !important; color: #f9f6f2 !important}
+.tile-2048 {background-color: #edc22e !important; color: #f9f6f2 !important}
 
 
 .tile {
-    color: black;
+    background-color: black;
+    color: white;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }

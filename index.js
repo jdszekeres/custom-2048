@@ -4,6 +4,8 @@ window.grid = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
 ]
+let score = 0;
+let high_score = config.options.saveHighScore ? parseInt(localStorage.getItem(config.options.HighScoreKey)) || 0 : 0;
 const randint = (start, end) => Math.floor(Math.random() * end - start) + start
 const rand_tile = () => randint(0, 3)
 const new_tile = () => randint(0, 10) === 9 ? 4 : 2
@@ -21,7 +23,6 @@ const add_random_tile = (grid) => {
         rand = 0;
     }
     const tile = avail[rand];
-    console.log(avail, tile, rand, avail.length - 1);
 
     grid[tile[0]][tile[1]] = new_tile()
 
@@ -31,10 +32,11 @@ const add_random_tile = (grid) => {
 
 document.addEventListener('keydown', keyPressHandler);
 
+let no_new_spaces = false;
 function keyPressHandler(e) {
     const prevTiles = structuredClone(grid)
 
-
+    const eq = a => b => a === b;
     switch (e.key) {
         case "ArrowUp":
         case "ArrowDown":
@@ -43,11 +45,12 @@ function keyPressHandler(e) {
 
 
 
-            newGrid = move(window.grid, e.key);
-
-            const b = [move(structuredClone(newGrid), 'ArrowRight'), move(structuredClone(newGrid), 'ArrowDown')];
-            const eq = a => b => a === b;
-            if (arrayDeepCompare(eq)(b[0])(b[1]) && arrayDeepCompare(eq)(b[1])(structuredClone(newGrid))) {
+            let result = move(window.grid, e.key);
+            newGrid = result.grid;
+            score += result.score;
+            const b = [move(structuredClone(newGrid), 'ArrowRight').grid, move(structuredClone(newGrid), 'ArrowDown').grid];
+            const avail = structuredClone(newGrid).flatMap((row, i) => row.map((val, j) => val === 0 ? [i, j] : null).filter(Boolean));
+            if (arrayDeepCompare(eq)(b[0])(b[1]) && arrayDeepCompare(eq)(b[1])(structuredClone(newGrid)) && avail === 0) {
                 alert("You lost") // no possible moves
             }
             break;
@@ -57,16 +60,17 @@ function keyPressHandler(e) {
     }
 
     // Check if move changed board. If so, add new random tile.
-    const nothingHappened = prevTiles.every((tile, index) => tile === [].concat(...newGrid)[index]);
-    console.log(nothingHappened)
+    const nothingHappened = arrayDeepCompare(eq)(prevTiles)(newGrid);
+    update_grid(newGrid);
     if (!nothingHappened) {
         try {
             add_random_tile(newGrid);
+            no_new_spaces = false;
         } catch (e) {
-
+            no_new_spaces = true;
         }
     }
-    update_grid(newGrid);
+    setTimeout(() => update_grid(newGrid), 1) // go twice so we merge then update
 
     setTimeout(() => {
         if (config.options.animate) {
@@ -100,6 +104,16 @@ const update_grid = (grid) => {
         }
     }
     textFit(document.querySelectorAll('div.tile'));
+    document.getElementById('current-score').textContent = score.toLocaleString();
+
+    if (high_score < score) {
+        score = high_score
+        if (parseInt(localStorage.getItem(config.options.HighScoreKey)) > high_score) {
+            high_score = score
+        }
+    }
+    document.getElementById('high-score').textContent = high_score.toLocaleString();
+
 }
 
 update_grid(grid);
