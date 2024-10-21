@@ -9,6 +9,8 @@
 ##### JS
 
 - `images` - Custom images to use in place of tiles
+  - Supports photos in `/images`, web urls, and Base64 images
+  - The placeholder images are all photos I've taken
 - `options` - General settings including
   - `animate` - Show css animations on movement
   - `showNumberOnHover` - Show tile number on custom images when hovering

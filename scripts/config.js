@@ -1,14 +1,17 @@
 const config = {
 
     images: {
-        // 2: "2.png",
-        // 4: "4.png",
-        // 8: "8.png",
-        // 16: "16.png",
-        // 32: "32.png",
-        // 64: "64.png",
-        // 128: "128.png",
-        // 256: "256.png",
+        2: "calgary.png",
+        4: "arenal.png",
+        8: "treasure lakes.png",
+        16: "sydney.png",
+        32: "kuranda.png",
+        64: "statue.png",
+        128: "plane.png",
+        256: "hawaii.png",
+        512: "banff.png",
+        1024: "dc.png",
+        2048: "eagle rock.png"
     },
     options: {
         showNumberOnHover: true,

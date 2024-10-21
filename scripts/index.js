@@ -2,7 +2,7 @@ window.grid = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
-    [0, 0, 0, 0],
+    [0, 0, 0, 0]
 ]
 let score = 0;
 let high_score = config.options.saveHighScore ? parseInt(localStorage.getItem(config.options.HighScoreKey)) || 0 : 0;
@@ -105,8 +105,9 @@ const update_grid = (grid) => {
         for (let j = 0; j <= 3; j++) {
             const val = grid[i][j]
             if (val !== 0) {
-                const img = config.images[val]
-                document.getElementById(`${i}-${j}`).innerHTML = img ? `<img class="tile tile-${val}" src="images/${img}" ${config.options.showNumberOnHover ? "title='" + val + "'" : ""}/>` : `<div class='tile tile-${val}'>${val}</div>`
+                const img = config.images[val] ?? ""
+                const isInFolder = !img.includes('data:image') && !img.includes('http');
+                document.getElementById(`${i}-${j}`).innerHTML = img !== "" ? `<img class="tile tile-${val}" src="${isInFolder ? 'images/' : ""}${img}" ${config.options.showNumberOnHover ? "title='" + val + "'" : ""}/>` : `<div class='tile tile-${val}'>${val}</div>`
             } else {
                 document.getElementById(`${i}-${j}`).innerHTML = "";
             }
